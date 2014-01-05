@@ -16,6 +16,8 @@ const int trigger  = 6;
 const int pingPin  = 7;
 const int buttonUp = 8;
 const int buttonDn = 9;
+const int highInch = 36;
+const int lowInch  = 24;
 
 // variables will change:
 int setUpState = 0;
@@ -36,15 +38,48 @@ void loop(){
   
   setUpState = digitalRead(buttonUp);
   setDnState = digitalRead(buttonDn);
+  inches = microsecondsToInches(duration);
+  
   if (setDnState == LOW) {
-    digitalWrite(outputDn, HIGH);  
-    delay(10000);
+    while (height > lowInch) {
+      pinMode(pingPin, OUTPUT);
+      digitalWrite(trigger, LOW);
+      delayMicroseconds(2);
+      digitalWrite(trigger, HIGH);
+      delayMicroseconds(5);
+      digitalWrite(trigger, LOW);
+      pinMode(pingPin, INPUT);
+      duration = pulseIn(pingPin, HIGH);
+      height = microsecondsToInches(duration);
+      \\ Go down!
+      digitalWrite(outputDn, HIGH);  
+    }
+    \\ Stop going down!
     digitalWrite(outputDn, LOW); 
   }
+
+
   if (setUpState == LOW) {
-    digitalWrite(outputUp, HIGH);  
-    delay(10000);
+    while (height < highInch) {
+      pinMode(pingPin, OUTPUT);
+      digitalWrite(trigger, LOW);
+      delayMicroseconds(2);
+      digitalWrite(trigger, HIGH);
+      delayMicroseconds(5);
+      digitalWrite(trigger, LOW);
+      pinMode(pingPin, INPUT);
+      duration = pulseIn(pingPin, HIGH);
+      height = microsecondsToInches(duration);
+      \\ Go up!
+      digitalWrite(outputUp, HIGH);  
+    }
+    \\ Stop going up!
     digitalWrite(outputUp, LOW); 
   }
   
+}
+
+long microsecondsToInches(long microseconds)
+{
+  return microseconds / 74 / 2;
 }
