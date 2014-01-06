@@ -16,8 +16,8 @@ const int trigger  = 6;
 const int pingPin  = 7;
 const int buttonUp = 8;
 const int buttonDn = 9;
-const int highInch = 36;
-const int lowInch  = 24;
+const int highInch = 40;
+const int lowInch  = 25;
 
 // variables will change:
 int setUpState = 0;
